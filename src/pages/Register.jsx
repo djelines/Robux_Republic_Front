@@ -4,13 +4,18 @@ import {Label} from "@/components/ui/label.jsx";
 import {Input} from "@/components/ui/input.jsx";
 import {Controller, useForm} from "react-hook-form";
 import {signUpUser} from "@/api/auth.js";
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
 
 
     const {control, handleSubmit, getValues} = useForm();
 
-    const onSubmit = (values) => signUpUser(values);
+    const navigate = useNavigate();
+
+    const onSubmit = (values) => signUpUser(values).finally(() => {
+        navigate("/login");
+    });
 
     return (
         <div className={"flex flex-col gap-4 items-center justify-center min-h-screen"}>

@@ -7,6 +7,7 @@ import Register from "@/pages/Register.jsx";
 import Login from "@/pages/Login.jsx";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import AuthRoute from "@/routes/AuthRoute.jsx";
+import VerifRoute from "@/routes/VerifRoute.jsx";
 
 function App() {
 
@@ -14,8 +15,6 @@ function App() {
     <>
       <Routes>
         <Route path={"/"} element={<Home/>}/>
-          <Route path={"/login"} element={<Login/>}/>
-          <Route path={"/register"} element={<Register/>}/>
           <Route path={"/"} element={<Home/>}/>
 
           {/* Route auth*/}
@@ -23,6 +22,13 @@ function App() {
             <Route path={"/dashboard"} element={<Home/>}/>
             <Route path={"/profile"} element={<Home/>}/>
           </Route>
+
+          <Route element={<VerifRoute/>}>
+            <Route path={"/login"} element={<Login/>}/>
+            <Route path={"/register"} element={<Register/>}/>
+          </Route>
+
+
       </Routes>
     </>
   )
