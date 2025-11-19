@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { Input } from '@/components/ui/input.jsx'
 import { Search, Loader2 } from 'lucide-react'
 
-// --- Hook useDebounce intégré pour éviter la dépendance externe ---
+// --- Hook useDebounce inchangé ---
 function useDebounce(value, delay) {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -20,8 +20,13 @@ function useDebounce(value, delay) {
 }
 
 const defaultFetchSuggestions = async (query, suggestionsList) => {
+    // Simulation de délai réseau
     await new Promise((resolve) => setTimeout(resolve, 300))
     if (!suggestionsList) return [];
+
+    // MODIFICATION : Si la query est vide, on retourne tout
+    if (!query || query.trim() === '') return suggestionsList;
+
     return suggestionsList.filter((suggestion) =>
         suggestion.toLowerCase().includes(query.toLowerCase()),
     )
@@ -32,7 +37,7 @@ export default function Autocomplete({
                                          onChange,
                                          suggestionsList = [],
                                          placeholder = "Search...",
-                                         fetchSuggestionsFn // Optionnel : permet de passer une fonction de recherche personnalisée
+                                         fetchSuggestionsFn
                                      }) {
     const [query, setQuery] = useState(value)
     const [debouncedQuery] = useDebounce(query, 300)
@@ -42,10 +47,9 @@ export default function Autocomplete({
     const [isFocused, setIsFocused] = useState(false)
 
     const fetchSuggestionsCallback = useCallback(async (q) => {
-        if (q.trim() === '') {
-            setSuggestions([])
-            return
-        }
+        // MODIFICATION 1 : On a supprimé le bloc "if (q.trim() === '') return"
+        // On veut permettre la recherche vide pour afficher la liste par défaut.
+
         setIsLoading(true)
         try {
             const fetcher = fetchSuggestionsFn || ((q) => defaultFetchSuggestions(q, suggestionsList));
@@ -60,13 +64,14 @@ export default function Autocomplete({
     }, [suggestionsList, fetchSuggestionsFn])
 
     useEffect(() => {
-        // Update internal state if prop value changes externally
         setQuery(value);
     }, [value]);
 
     useEffect(() => {
-        if (debouncedQuery && isFocused) {
-            fetchSuggestionsCallback(debouncedQuery)
+        // MODIFICATION 3 : On lance la recherche tant qu'on est focus.
+        // Si debouncedQuery est vide, fetchSuggestionsCallback recevra "" et renverra toute la liste.
+        if (isFocused) {
+            fetchSuggestionsCallback(debouncedQuery || '')
         } else {
             setSuggestions([])
         }
@@ -89,13 +94,13 @@ export default function Autocomplete({
             e.preventDefault()
             setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1))
         } else if (e.key === 'Enter' && selectedIndex >= 0) {
-            e.preventDefault(); // Prevent form submission
+            e.preventDefault();
             const selected = suggestions[selectedIndex];
             setQuery(selected)
             onChange?.(selected)
             setSuggestions([])
             setSelectedIndex(-1)
-            setIsFocused(false) // Close dropdown
+            setIsFocused(false)
         } else if (e.key === 'Escape') {
             setSuggestions([])
             setSelectedIndex(-1)
@@ -112,12 +117,12 @@ export default function Autocomplete({
 
     const handleFocus = () => {
         setIsFocused(true)
-        // Trigger search immediately on focus if there is a query
-        if(query) fetchSuggestionsCallback(query);
+        // MODIFICATION 2 : On force l'appel même si la query est vide
+        // On passe query || '' pour être sûr de passer une chaine
+        fetchSuggestionsCallback(query || '');
     }
 
     const handleBlur = () => {
-        // Delay hiding suggestions to allow for click events on suggestions
         setTimeout(() => {
             setIsFocused(false)
             setSuggestions([])
@@ -137,6 +142,7 @@ export default function Autocomplete({
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     className="pr-10 w-full"
+                    // Accessibilité
                     aria-label="Search input"
                     aria-autocomplete="list"
                     aria-controls="suggestions-list"

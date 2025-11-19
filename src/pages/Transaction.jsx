@@ -43,8 +43,11 @@ function Transaction() {
 
     useEffect(() => {
         const defineDefaultTab = () => {
-            if(searchParams){
+            if(searchParams.get("type")){
                 setDefaultTab(searchParams.get("type"));
+            }
+            else{
+                setDefaultTab("depot")
             }
         }
 

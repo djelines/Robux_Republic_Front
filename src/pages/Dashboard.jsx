@@ -72,8 +72,8 @@ function Dashboard() {
       icon: <LayoutDashboard className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />,
     },
     {
-      label: "Profil",
-      href: "#",
+      label: "Transactions",
+      href: "dashboard/transaction?type=depot",
       icon: <User className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />,
     },
     {
