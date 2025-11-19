@@ -8,6 +8,7 @@ import Login from "@/pages/Login.jsx";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import AuthRoute from "@/routes/AuthRoute.jsx";
 import VerifRoute from "@/routes/VerifRoute.jsx";
+import Transaction from "@/pages/Transaction.jsx";
 import Profile from "@/pages/Profile.jsx";
 import Beneficiary from './pages/Beneficiary';
 import Dashboard from "@/pages/Dashboard.jsx";
@@ -26,9 +27,12 @@ function App() {
             <Route path={"/dashboard"} element={<Dashboard/>}/>
             <Route path={"/bank-account/:account"} element={<BankAccount/>}/>
             <Route path={"/beneficiary"} element={<Beneficiary/>}/>
+            <Route path={"/dashboard"} element={<Home/>}/>
+            <Route path={"/profile"} element={<Home/>}/>
+            <Route path={"/dashboard/transaction"} element={<Transaction/>}/>
           </Route>
 
-          <Route element={<VerifRoute/>}>
+          <Route >
             <Route path={"/login"} element={<Login/>}/>
             <Route path={"/register"} element={<Register/>}/>
           </Route>
