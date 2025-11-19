@@ -13,10 +13,12 @@ export default function BodyProfile() {
 
     if (isPending) {
         return (
-            <div className="w-full h-screen flex items-center justify-center text-slate-500">
-                Chargement des informations...
-            </div>
+            <div className="w-full h-screen flex items-center justify-center text-slate-500">Chargement des informations...</div>
         );
+    }
+    const disconnect = () => {
+        sessionStorage.removeItem("access_token");
+        window.location.reload();
     }
     return (
         <div className="relative w-full h-screen flex items-center justify-center">
@@ -46,21 +48,16 @@ export default function BodyProfile() {
                             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                                 Informations Personnelles
                             </h2>
-                            <p className="text-sm text-slate-500 mb-6">
-                                Mettez à jour vos coordonnées et vos paramètres de compte.
-                            </p>
+                            <p className="text-sm text-slate-500 mb-6">Mettez à jour vos coordonnées et vos paramètres de compte.</p>
                         </div>
 
                         <div className="flex-1 bg-white dark:bg-gray-900 rounded-3xl shadow-sm p-6 border border-gray-100 dark:border-gray-800">
-                            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mb-4 tracking-wider">
-                                Actions
-                            </h3>
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase mb-4 tracking-wider">Actions</h3>
                             <nav className="space-y-2">
-                                <button className="w-full flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition">
-                                    <CreditCard size={20} />
+                                <button className="w-full flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition"><CreditCard size={20} />
                                     <span>Compte bancaire</span>
                                 </button>
-                                <button className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl font-medium transition mt-4">
+                                <button className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl font-medium transition mt-4" onClick={disconnect}>
                                     <LogOut size={20} />
                                     <span>Déconnexion</span>
                                 </button>
