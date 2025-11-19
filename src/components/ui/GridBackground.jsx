@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import {ArrowUpDown, MoveUpRight} from "lucide-react";
 import {Input} from "@/components/ui/input.jsx";
 import {GradientBackground} from "@/components/animate-ui/components/backgrounds/gradient.jsx";
+import DropdownTransactionMenu from "@/components/DropdownTransactionMenu.jsx";
 
 export default function GridBackground() {
 
@@ -67,6 +68,10 @@ export default function GridBackground() {
             />
             {/* Radial gradient for the container to give a faded look */}
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+
+            <div className={"absolute z-20 right-40 top-10"}>
+                <DropdownTransactionMenu/>
+            </div>
 
             <div className={"flex flex-col justify-around min-h-screen py-10"}>
                 <div className={"flex flex-col gap-1 items-center h-full my-auto"}>

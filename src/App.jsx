@@ -8,6 +8,7 @@ import Login from "@/pages/Login.jsx";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import AuthRoute from "@/routes/AuthRoute.jsx";
 import VerifRoute from "@/routes/VerifRoute.jsx";
+import Transaction from "@/pages/Transaction.jsx";
 
 function App() {
 
@@ -21,9 +22,10 @@ function App() {
           <Route element={<AuthRoute/>}>
             <Route path={"/dashboard"} element={<Home/>}/>
             <Route path={"/profile"} element={<Home/>}/>
+            <Route path={"/dashboard/transaction"} element={<Transaction/>}/>
           </Route>
 
-          <Route element={<VerifRoute/>}>
+          <Route >
             <Route path={"/login"} element={<Login/>}/>
             <Route path={"/register"} element={<Register/>}/>
           </Route>
