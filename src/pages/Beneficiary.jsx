@@ -53,7 +53,7 @@ function Beneficiary() {
   return (
     <GridBackground> 
 
-      <div className="min-h-screen">
+      <div className="min-h-screen px-30">
 
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-4xl font-extrabold text-gray-800 flex items-center gap-3">
@@ -91,7 +91,7 @@ function Beneficiary() {
       "
             >
 
-              <div className="flex items-center gap-3 mb-6 pb-3 border-b border-gray-200">
+              <div className="flex items-center gap-3 mb-6 pb-3 border-b border-gray-200 ">
                 <div className="p-2 rounded-xl bg-indigo-100 border border-indigo-200">
                   <PlusCircle className="w-6 h-6 text-indigo-600" />
                 </div>
@@ -184,13 +184,13 @@ function Beneficiary() {
 
       )}
 
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
 
         <li
           onClick={() => setShowForm(true)}
           className="
             flex flex-col items-center justify-center 
-            h-48 rounded-xl border-2 border-dotted border-gray-300 
+             rounded-xl border-2 border-dotted border-gray-300 
             bg-white shadow-sm hover:shadow-md 
             hover:border-indigo-400 hover:bg-indigo-50/40
             cursor-pointer transition
