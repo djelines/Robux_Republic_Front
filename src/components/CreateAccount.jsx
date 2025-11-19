@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+
 import SimpleModal from "@/components/ModalCreateAccount.jsx";
 import { Controller, useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,7 @@ import { useUser } from "@/context/UserContext.jsx";
 
 export default function CreateAccountModal({ open, onClose, onSuccess }) {
   const { control, handleSubmit, reset } = useForm();
+  const [errorMessage, setErrorMessage] = useState("");
   const { setUser, user } = useUser();
 
   useEffect(() => {
