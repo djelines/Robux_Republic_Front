@@ -14,6 +14,10 @@ function Beneficiary() {
   const [iban, setIban] = useState("")
   const [showMore, setShowMore] = useState(false)
 
+  // Bénéficiaires à afficher
+  const visibleBeneficiaries = showMore ? beneficiaries : beneficiaries.slice(0, 1)
+
+  // Fetch des bénéficiaires au chargement
   useEffect(() => {
     fetchBeneficiaries()
       .then(data => {
@@ -27,6 +31,7 @@ function Beneficiary() {
       })
   }, [])
 
+  // Soumission du formulaire d'ajout
   const handleSubmit = async () => {
     try {
       const newBeneficiary = await createBeneficiary(name, iban)
@@ -41,14 +46,12 @@ function Beneficiary() {
     }
   }
 
-  const visibleBeneficiaries = showMore ? beneficiaries : beneficiaries.slice(0, 1)
 
 
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
 
-      {/* HEADER */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-4xl font-extrabold text-gray-800 flex items-center gap-3">
           <User className="w-10 h-10 text-indigo-600" />
@@ -57,8 +60,6 @@ function Beneficiary() {
       </div>
 
 
-
-      {/* MODAL */}
       {showForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50">
           <div
@@ -86,7 +87,7 @@ function Beneficiary() {
         hover:shadow-xl transition-shadow
       "
             >
-              {/* Header */}
+
               <div className="flex items-center gap-3 mb-6 pb-3 border-b border-gray-200">
                 <div className="p-2 rounded-xl bg-indigo-100 border border-indigo-200">
                   <PlusCircle className="w-6 h-6 text-indigo-600" />
@@ -180,14 +181,8 @@ function Beneficiary() {
 
       )}
 
-
-
-      {/* ------------------------------- */}
-      {/*   CARTES DE BÉNÉFICIAIRES       */}
-      {/* ------------------------------- */}
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {/* CARD AJOUT TOUJOURS AFFICHÉE */}
         <li
           onClick={() => setShowForm(true)}
           className="
@@ -202,7 +197,6 @@ function Beneficiary() {
           <p className="text-lg font-medium text-gray-700">Ajouter un bénéficiaire</p>
         </li>
 
-        {/* SI VIDE → MESSAGE */}
         {beneficiaries.length === 0 && (
           <li className="col-span-full flex flex-col items-center mt-6 text-gray-400">
             <UserMinus className="w-14 h-14 mb-3" />
@@ -210,7 +204,6 @@ function Beneficiary() {
           </li>
         )}
 
-        {/* AFFICHAGE DES CARDS */}
         {visibleBeneficiaries.map((b) => (
           <li
             key={b.id}
@@ -221,13 +214,11 @@ function Beneficiary() {
             "
           >
 
-            {/* Bandeau */}
             <div className="bg-indigo-600 text-white px-4 py-2 text-lg font-semibold flex items-center gap-2">
               <User className="w-5 h-5" />
               {b.name}
             </div>
 
-            {/* Contenu */}
             <div className="p-4 flex flex-col justify-between h-full relative">
 
               <div>
@@ -263,7 +254,7 @@ function Beneficiary() {
       </ul>
 
 
-      {beneficiaries.length > 1 && (
+      {beneficiaries.length > 5 && (
         <div className="flex justify-center mt-6">
           {!showMore ? (
             <button
