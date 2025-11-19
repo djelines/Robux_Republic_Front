@@ -23,17 +23,22 @@ function Transaction() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { user } = useUser();
 
-    // J'ai ajouté une valeur par défaut 'virement' si pas de paramètre pour éviter l'écran blanc
     const [defaultTab, setDefaultTab] = useState(searchParams.get("type") || "virement");
     const [allBankAccounts, setAllBankAccounts] = useState([]);
     const [allBeneficiaries, setAllBeneficiaries] = useState([]);
 
     useEffect(() => {
-        const type = searchParams.get("type");
-        if(type){
-            setDefaultTab(type);
+        const defineDefaultTab = () => {
+            if(searchParams.get("type")){
+                setDefaultTab(searchParams.get("type"));
+            }
+            else{
+                setDefaultTab("depot")
+            }
         }
-    }, [searchParams]);
+
+        defineDefaultTab();
+    }, []);
 
     useEffect(() => {
         if (user?.uid) {

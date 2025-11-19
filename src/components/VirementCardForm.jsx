@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {ArrowRight, Landmark, Loader, Type, User, X} from "lucide-react";
+import React, {useEffect, useState} from 'react';
+import {ArrowRight, Landmark, Loader, Type, User, X, Plus} from "lucide-react";
 import {
     Select,
     SelectContent,
@@ -16,10 +16,13 @@ import {cancelTransaction, createTransaction} from "@/api/transaction.js";
 import {MultiStepLoader} from "@/components/ui/multi-step-loader.jsx";
 import Autocomplete from "@/components/ui/Autocomplete.jsx";
 import {fetchBeneficiaries} from "@/api/beneficiary.js";
+import FinishedTransactionModal from "@/components/FinishedTransactionModal.jsx";
+import {Tooltip, TooltipPanel, TooltipTrigger} from "@/components/animate-ui/components/base/tooltip.jsx";
+import CreateBeneficiaryModal from "@/components/modals/CreateBeneficiaryModal.jsx";
 
 function VirementCardForm({allBankAccounts}) {
 
-    const {handleSubmit, control} = useForm();
+    const {handleSubmit, control, getValues} = useForm();
 
     const [submitError, setSubmitError] = React.useState("");
     const [loading, setLoading] = React.useState(false);
@@ -27,6 +30,9 @@ function VirementCardForm({allBankAccounts}) {
 
     const [beneficiaries, setBeneficiaries] = React.useState([]);
     const [beneficiariesName, setBeneficiariesName] = React.useState([]);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isBeneficiariesOpen, setIsBeneficiariesOpen] = React.useState(false);
 
     const [createdTransactionData, setCreateTransactionData] = React.useState({});
 
@@ -61,11 +67,15 @@ function VirementCardForm({allBankAccounts}) {
         console.log(beneficiaries)
     }, [beneficiaries]);
 
+    useEffect(() => {
+        console.log(getValues("iban_to"))
+    }, [getValues])
+
 
     const onSubmit = (values) => {
 
         console.log(values.iban_to);
-        const getBeneficiaryIban = beneficiaries.find((beneficiary) => beneficiary.name === values.iban_to).iban_to ?? values.iban_to;
+        const getBeneficiaryIban = beneficiaries.find((beneficiary) => beneficiary.name === values.iban_to)?.iban_to ?? values.iban_to;
 
         console.log(getBeneficiaryIban);
         const finalPayload = {
@@ -89,7 +99,13 @@ function VirementCardForm({allBankAccounts}) {
 
             setLoading(true);
             setIsLoading(true);
-            setCreateTransactionData(result);
+            console.log(beneficiaries);
+            setCreateTransactionData({
+                ...finalPayload,
+                to_account: beneficiaries.find((beneficiary) => beneficiary.iban_to === finalPayload.iban_to)?.name ?? finalPayload.iban_to,
+                from_account: allBankAccounts.find((bank_account) => bank_account.iban === finalPayload.iban_from).name,
+                type: "Virement",
+            });
         });
     }
 
@@ -102,9 +118,33 @@ function VirementCardForm({allBankAccounts}) {
         });
     }
 
+    const addBeneficiary = () => {
+        setIsBeneficiariesOpen(true)
+    }
+
     useEffect(() => {
         console.log(isLoading)
     }, [isLoading]);
+
+    const STEP_DURATION = 1250;
+
+    useEffect(() => {
+        let timer;
+
+        if (isLoading) {
+            const totalTime = loadingStates.length * STEP_DURATION;
+
+            timer = setTimeout(() => {
+                setLoading(false);
+                setIsLoading(false);
+
+                setIsModalOpen(true);
+
+            }, totalTime);
+        }
+
+        return () => clearTimeout(timer);
+    }, [isLoading, loadingStates.length]);
 
     return (
         <>
@@ -116,7 +156,7 @@ function VirementCardForm({allBankAccounts}) {
                         <Type className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6"/>
                     </div>
                     <div className="flex flex-col gap-1 flex-1 min-w-0"> {/* min-w-0 empêche l'overflow */}
-                        <label className="block text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider">
+                        <label className="block text-[10px] sm:text-xs font-bold text-gray-400 uppercase font-title tracking-wider">
                             Intitulé
                         </label>
                         <Controller
@@ -124,7 +164,7 @@ function VirementCardForm({allBankAccounts}) {
                             render={({ field }) => (
                                 <input {...field}
                                        className="bg-transparent !outline-none w-full font-medium text-gray-900 text-sm sm:text-base placeholder-gray-400 truncate"
-                                       placeholder="L'intitulé de votre virement"/>
+                                       placeholder="Motif du virement (optionnel)"/>
                             )}
                             name="name"
                         />
@@ -158,14 +198,14 @@ function VirementCardForm({allBankAccounts}) {
                                                     <SelectItem key={account.iban} value={account.iban} className="text-xs sm:text-sm">
                                                         <span className="font-medium">{account.name}</span>
                                                         <span className="mx-1 text-gray-400">•</span>
-                                                        <span>{parseFloat(account.balance).toFixed(2)}</span>
+                                                        <span>{parseFloat(account.balance).toFixed(2)} RBX</span>
                                                     </SelectItem>
                                                 ))}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                     {fieldState.error && (
-                                        <p className="text-red-500 text-[10px] mt-1 absolute -bottom-4 left-0">
+                                        <p className="text-red-500 text-xs my-1">
                                             {fieldState.error.message}
                                         </p>
                                     )}
@@ -175,7 +215,7 @@ function VirementCardForm({allBankAccounts}) {
                     </div>
                 </div>
 
-                <div className="bg-gray-50 p-3 sm:p-4 rounded-2xl border border-gray-100 flex flex-row items-center gap-3 sm:gap-4 mb-6 sm:mb-8"> {/* Marge du bas réduite mais un peu plus grande pour séparer la section montant */}
+                <div className="bg-gray-50 p-3 sm:p-4 rounded-2xl border border-gray-100 flex flex-row items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
                     <div className="p-2 bg-white rounded-lg shadow-sm border border-gray-100 text-gray-500 shrink-0">
                         <User className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6"/>
                     </div>
@@ -189,12 +229,26 @@ function VirementCardForm({allBankAccounts}) {
                             name="iban_to"
                             render={({ field, fieldState }) => (
                                 <div className="relative">
-                                    {/* J'ai supposé que SearchBar accepte des classes pour réduire la taille */}
-                                    <div className="text-sm sm:text-base">
-                                        <Autocomplete {...field} suggestionsList={beneficiariesName} />
+
+                                    <div className="flex items-center gap-2">
+
+                                        <div className="flex-1 text-sm sm:text-base">
+                                            <Autocomplete {...field} suggestionsList={beneficiariesName} placeholder={"Chercher un bénéficiaire ou un Iban"}/>
+                                        </div>
+
+                                        {field.value && field.value.toString().includes("RobuxCommunity") && (
+                                            <Tooltip followCursor={true}>
+                                                <TooltipTrigger render={<Button type={"button"} onClick={addBeneficiary} variant="outline"><Plus size={13}/></Button>} />
+                                                <TooltipPanel
+                                                >
+                                                    <p>Ajouter en bénéficiaire</p>
+                                                </TooltipPanel>
+                                            </Tooltip>
+                                        )}
                                     </div>
+
                                     {fieldState.error && (
-                                        <p className="text-red-500 text-[10px] mt-1 absolute top-full left-0">
+                                        <p className="text-red-500 text-xs my-1">
                                             {fieldState.error.message}
                                         </p>
                                     )}
@@ -213,6 +267,7 @@ function VirementCardForm({allBankAccounts}) {
                             control={control}
                             rules={{ required: "Montant requis", valueAsNumber: true }}
                             name="amount"
+                            defaultValue={0.00}
                             render={({ field, fieldState }) => (
                                 <div className="flex flex-col items-center justify-center relative">
                                     <input type="number"
@@ -221,7 +276,7 @@ function VirementCardForm({allBankAccounts}) {
                                            placeholder="0.00"
                                     />
                                     {fieldState.error && (
-                                        <p className="text-red-500 text-[10px] absolute -bottom-4 w-max">
+                                        <p className="text-red-500 text-xs my-1">
                                             {fieldState.error.message}
                                         </p>
                                     )}
@@ -245,7 +300,7 @@ function VirementCardForm({allBankAccounts}) {
 
             {loading && (
                 <div className={"absolute w-full h-full top-0 left-0 bg-white flex items-center justify-center"}>
-                    <MultiStepLoader loadingStates={loadingStates} duration={1250} loading={isLoading} loop={false}/>
+                    <MultiStepLoader loadingStates={loadingStates} duration={STEP_DURATION} loading={isLoading} loop={false}/>
 
                     <div className={"z-999 mt-auto mb-10 flex flex-col items-center"}>
                         <Button
@@ -258,6 +313,11 @@ function VirementCardForm({allBankAccounts}) {
                         </p>
                     </div>
                 </div>
+            )}
+
+            <FinishedTransactionModal open={isModalOpen} onClose={() => setIsModalOpen(false)} transaction={createdTransactionData}/>
+            {isBeneficiariesOpen && (
+                <CreateBeneficiaryModal ibanParams={getValues("iban_to")} isOpen={isBeneficiariesOpen} setIsOpen={setIsBeneficiariesOpen}/>
             )}
         </>
     );
