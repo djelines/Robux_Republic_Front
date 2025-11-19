@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+
 import SimpleModal from "@/components/ModalCreateAccount.jsx";
 import { Controller, useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,7 @@ import { useUser } from "@/context/UserContext.jsx";
 
 export default function CreateAccountModal({ open, onClose, onSuccess }) {
   const { control, handleSubmit, reset } = useForm();
+  const [errorMessage, setErrorMessage] = useState("");
   const { setUser, user } = useUser();
 
   useEffect(() => {
@@ -15,23 +17,26 @@ export default function CreateAccountModal({ open, onClose, onSuccess }) {
     }
   }, [open, reset]);
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
+    setErrorMessage(""); 
     const loaddata = {
       name: values.name,
-      uid: user?.uid,
+      uid: sessionStorage.getItem("access_token"),
     };
 
-    createBankAccount(loaddata).then((data) => {
-      if (onSuccess) {
-        const dataMerged = {
-          ...data.bank_account, 
-          ...data.user_bank_account, 
-        };
-        onSuccess(dataMerged);
+    try {
+      const result = await createBankAccount(loaddata);
+      if (result.error) {
+        setErrorMessage(result.error);
+        return;
       }
       onClose();
-    });
+    } catch (error) {
+      setErrorMessage("Erreur lors de la création du compte : " + error.message);
+      console.error(error);
+    }
   };
+
   return (
     <SimpleModal isOpen={open} onClose={onClose} title="Création de Compte">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,6 +68,9 @@ export default function CreateAccountModal({ open, onClose, onSuccess }) {
             </LabelInputContainer>
           )}
         />
+        {errorMessage && (
+          <div className="text-red-600 text-sm mb-4">{errorMessage}</div>
+        )}
         <button
           className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[15px] py-4 rounded-2xl transition-colors shadow-sm"
           type="submit"
