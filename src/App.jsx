@@ -8,6 +8,7 @@ import Login from "@/pages/Login.jsx";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import AuthRoute from "@/routes/AuthRoute.jsx";
 import VerifRoute from "@/routes/VerifRoute.jsx";
+import Dashboard from "@/pages/Dashboard.jsx";
 
 function App() {
 
@@ -19,7 +20,7 @@ function App() {
 
           {/* Route auth*/}
           <Route element={<AuthRoute/>}>
-            <Route path={"/dashboard"} element={<Home/>}/>
+            <Route path={"/dashboard"} element={<Dashboard/>}/>
             <Route path={"/profile"} element={<Home/>}/>
           </Route>
 

@@ -11,7 +11,6 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const loadUser = () => {
             getMe().then(r => {
-                console.log(r);
                 setUser(r);
             }).finally(() => setIsPending(false));
         }
@@ -20,7 +19,6 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        console.log(user);
     }, [user])
 
     return (

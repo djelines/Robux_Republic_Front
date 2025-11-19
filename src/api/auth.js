@@ -19,9 +19,6 @@ export const signUpUser = async (
             })
         })
 
-        console.log(res);
-        console.log(res.ok);
-        console.log(res.body);
     } catch (error) {
         console.log(error)
     }
@@ -63,7 +60,6 @@ export const getMe = async() => {
                 authorization: `Bearer ${sessionStorage.getItem("access_token")}`
             }
         })
-        console.log(res)
 
         if(res.ok) return res.json();
     } catch (error) {
