@@ -23,7 +23,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select.jsx";
-import {getAllBankAccounts} from "@/api/bankAccount.js";
+import {getAllBankAccountsTransfert} from "@/api/bankAccount.js";
 import {useUser} from "@/context/UserContext.jsx";
 import {Button} from "@/components/animate-ui/components/buttons/button.jsx";
 import SearchBar from "@/components/SearchBar.jsx";
@@ -52,7 +52,7 @@ function Transaction() {
     }, []);
 
     useEffect(() => {
-        getAllBankAccounts(user.uid).then((result) => {
+        getAllBankAccountsTransfert(user.uid).then((result) => {
             setAllBankAccounts(result);
         });
 

@@ -11,20 +11,10 @@ import {
     SelectValue
 } from "@/components/ui/select.jsx";
 import {Input} from "@/components/ui/input.jsx";
+import {createTransaction} from "@/api/transaction.js";
+import {getRobuxBankAccount} from "@/api/bankAccount.js";
 
-// --- MOCK API & COMPONENTS (Pour la prévisualisation) ---
-// Ces fonctions remplacent les imports manquants pour que le code compile.
-const createTransaction = async (data) => {
-    console.log("Transaction envoyée (Mock):", data);
-    return new Promise(resolve => setTimeout(() => resolve({ detail: "Mandat généré avec succès (Simulation)" }), 1000));
-};
-
-const getRobuxBankAccount = async () => {
-    return new Promise(resolve => setTimeout(() => resolve({ iban: "FR76ROBUXBANK123" }), 500));
-};
-// -------------------------------------------------------
-
-function DepotCardForm({allBankAccounts = []}) { // Valeur par défaut pour éviter crash si undefined
+function DepotCardForm({allBankAccounts = []}) {
 
     const {handleSubmit, control} = useForm();
 

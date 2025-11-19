@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export const getTransactionByIban = async (iban) => {
   try {
     const res = await fetch(
@@ -127,7 +126,7 @@ export const getTransactionsByIbanList = async (ibanList) => {
     return [];
   }
 };
-=======
+
 
 
 export const createTransaction = async (transaction) => {
@@ -168,4 +167,3 @@ export const cancelTransaction = async (transaction_id) => {
         console.error(e)
     }
 }
->>>>>>> feature/money_transfert
