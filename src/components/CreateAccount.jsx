@@ -16,16 +16,23 @@ export default function CreateAccountModal({ open, onClose, onSuccess }) {
   }, [open, reset]);
 
   const onSubmit = async (values) => {
+    setErrorMessage(""); 
     const loaddata = {
       name: values.name,
       uid: sessionStorage.getItem("access_token"),
     };
-    const result = await createBankAccount(loaddata);
-    if (result.error) {
-      setError(result.error);
-      return;
+
+    try {
+      const result = await createBankAccount(loaddata);
+      if (result.error) {
+        setErrorMessage(result.error);
+        return;
+      }
+      onClose();
+    } catch (error) {
+      setErrorMessage("Erreur lors de la création du compte : " + error.message);
+      console.error(error);
     }
-    setIsOpen(false);
   };
 
   return (
@@ -59,6 +66,9 @@ export default function CreateAccountModal({ open, onClose, onSuccess }) {
             </LabelInputContainer>
           )}
         />
+        {errorMessage && (
+          <div className="text-red-600 text-sm mb-4">{errorMessage}</div>
+        )}
         <button
           className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[15px] py-4 rounded-2xl transition-colors shadow-sm"
           type="submit"

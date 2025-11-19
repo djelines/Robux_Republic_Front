@@ -8,7 +8,7 @@ export default function DeleteAccountModal({ open, onClose, iban }) {
 
   const handleConfirm = async () => {
     if (!iban) {
-      console.error("Aucun IBAN fourni pour la suppression");
+      setErrorMessage("Aucun IBAN fourni pour la suppression");
       return;
     }
 
@@ -17,7 +17,7 @@ export default function DeleteAccountModal({ open, onClose, iban }) {
       onClose();
       navigate(-1);
     } catch (error) {
-      console.error("Erreur lors de la suppression", error);
+      setErrorMessage("Erreur lors de la suppression : " + error.message);
     }
   };
 
@@ -40,6 +40,9 @@ export default function DeleteAccountModal({ open, onClose, iban }) {
             irréversible.
           </p>
           <div className="flex justify-end gap-3">
+            {errorMessage && (
+              <div className="text-red-600 text-sm mb-4">{errorMessage}</div>
+            )}
             <button
               onClick={onClose}
               className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-colors"
