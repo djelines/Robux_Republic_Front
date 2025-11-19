@@ -4,6 +4,7 @@ import PersonalInfoCard from "@/components/ui/PersonalInfoCard.jsx";
 import { CreditCard, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 import { LayoutTextFlip } from "@/components/ui/layout-text-flip.jsx";
+import ModalCreateAccount from "@/components/CreateAccount.jsx";
 import { useUser } from "@/context/UserContext.jsx";
 
 export default function BodyProfile() {
@@ -29,8 +30,10 @@ export default function BodyProfile() {
                     )}
                 />
             </div>
+            
 
             <div className="relative z-10 flex flex-col items-center justify-center gap-12">
+            {/* <ModalCreateAccount /> */}
                 {/* Titre */}
                 <h1 className="font-title text-5xl font-bold sm:text-6xl md:text-7xl text-center">
                     <motion.div className="flex flex-col items-center justify-center gap-4 text-center sm:flex-row">

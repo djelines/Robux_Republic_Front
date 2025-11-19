@@ -1,24 +1,35 @@
 import React, { useState } from "react";
 import SimpleModal from "@/components/ModalCreateAccount.jsx";
 import { Controller, useForm } from "react-hook-form";
+import { cn } from "@/lib/utils";
+import { createBankAccount } from "@/api/BankAccount.js";
+import { useUser } from "@/context/UserContext.jsx";
 
-
-export default function App() {
+  export default function App() {
   const [isOpen, setIsOpen] = useState(false);
   const { control, handleSubmit } = useForm();
+  const { setUser } = useUser();
+  const { user } = useUser();
+
 
   const onSubmit = (values) => {
-    signInUser(values).then((data) => {
-      console.log(data)
-      if (data) setUser(data);
-      console.log("user", user)
 
+    const loaddata ={
+      name: values.name,
+      uid : user?.uid
+    }
+
+    createBankAccount(loaddata).then((data) => {
+      if (data) setUser(data);
+      setIsOpen(false);
+      console.log("Compte crée !", data)
+      console.log("values", values)
     });
   };
 
   return (
     <div className="p-10">
-      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Creer un compte</button>
+      <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Créer un compte</button>
       <SimpleModal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Création de Compte">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller name={"name"}
