@@ -25,17 +25,6 @@ export default function BodyProfile() {
     };
 
     return (
-        <div className="relative w-full h-screen flex items-center justify-center bg-white dark:bg-gray-950">
-            <div className="absolute inset-0 z-0 bg-grid-pattern opacity-20 dark:opacity-30">
-                <div
-                    className={cn(
-                        "absolute inset-0",
-                        "[background-size:40px_40px]",
-                        "[background-image:linear-gradient(to_right,#e4e4e7_2px,transparent_2px),linear-gradient(to_bottom,#e4e4e7_2px,transparent_2px)]",
-                        "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]"
-                    )}
-                />
-            </div>
             <div className="relative z-10 flex flex-col items-center justify-center gap-12">
                 <h1 className="font-title text-5xl font-bold sm:text-6xl md:text-7xl text-center text-slate-900 dark:text-white">
                     <motion.div className="flex flex-col items-center justify-center gap-4 text-center sm:flex-row">
@@ -68,7 +57,6 @@ export default function BodyProfile() {
                     <PersonalInfoCard user={user} />
                 </div>
             </div>
-        </div>
     );
 }
 
