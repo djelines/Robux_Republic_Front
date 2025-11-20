@@ -69,25 +69,6 @@ export default function ModalInfoBig({
           <div className="overflow-y-auto pr-2 text-gray-600 leading-relaxed space-y-4">
             {children}
           </div>
-
-          <div className="mt-8 flex justify-end">
-            <button
-              onClick={onClose}
-              className="
-                px-6 py-2.5
-                rounded-xl 
-                bg-gray-900 
-                text-white 
-                font-medium
-                hover:bg-gray-800 
-                hover:shadow-lg
-                active:scale-95
-                transition-all
-              "
-            >
-              Compris
-            </button>
-          </div>
         </div>
       </div>
     </div>

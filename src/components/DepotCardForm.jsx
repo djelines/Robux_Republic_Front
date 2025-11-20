@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {use, useEffect, useState} from 'react';
 import {ArrowRight, Banknote, FilePenLine, Landmark, MapPin, QrCode, Type, User, Wallet, X} from "lucide-react";
 import {Controller, useForm} from "react-hook-form";
 import {
@@ -17,7 +17,7 @@ import FinishedTransactionModal from "@/components/FinishedTransactionModal.jsx"
 import {MultiStepLoader} from "@/components/ui/multi-step-loader.jsx";
 import {Button} from "@/components/animate-ui/components/buttons/button.jsx";
 
-function DepotCardForm({allBankAccounts = []}) {
+function DepotCardForm({allBankAccounts = [], onSuccess}) {
 
     const {handleSubmit, control} = useForm();
 
@@ -33,6 +33,12 @@ function DepotCardForm({allBankAccounts = []}) {
     const [createdTransactionData, setCreateTransactionData] = React.useState({});
 
     const [submitError, setSubmitError] = React.useState("");
+
+    useEffect(() => {
+        if (isModalOpen && onSuccess) {
+            onSuccess(createdTransactionData);
+        }
+    }, [isModalOpen]);
 
 
     const STEP_DURATION = 1250;
@@ -80,7 +86,7 @@ function DepotCardForm({allBankAccounts = []}) {
                 type: depotType === "espece" ? "Espèces" : "Chèque",
             }
 
-            setCreateTransactionData(transactionPayload);
+            setCreateTransactionData(transactionPayload );
         });
     }
 
@@ -108,12 +114,11 @@ function DepotCardForm({allBankAccounts = []}) {
             timer = setTimeout(() => {
                 setLoading(false);
                 setIsLoading(false);
-
                 setIsModalOpen(true);
 
             }, totalTime);
         }
-
+        
         return () => clearTimeout(timer);
     }, [isLoading, loadingStates.length]);
 

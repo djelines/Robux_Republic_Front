@@ -20,7 +20,7 @@ import FinishedTransactionModal from "@/components/FinishedTransactionModal.jsx"
 import {Tooltip, TooltipPanel, TooltipTrigger} from "@/components/animate-ui/components/base/tooltip.jsx";
 import CreateBeneficiaryModal from "@/components/modals/CreateBeneficiaryModal.jsx";
 
-function VirementCardForm({allBankAccounts}) {
+function VirementCardForm({allBankAccounts , onSuccess}) {
 
     const {handleSubmit, control, getValues} = useForm();
 
@@ -70,6 +70,12 @@ function VirementCardForm({allBankAccounts}) {
     useEffect(() => {
         console.log(getValues("iban_to"))
     }, [getValues])
+
+    useEffect(() => {
+        if (isModalOpen && onSuccess) {
+            onSuccess(createdTransactionData);
+        }
+    }, [isModalOpen]);
 
 
     const onSubmit = (values) => {

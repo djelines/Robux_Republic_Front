@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   ArrowLeft,
   Download,
@@ -25,9 +25,13 @@ import {
   CardTitle,
 } from "@/components/ui/card.jsx";
 import { useUser } from "@/context/UserContext.jsx";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { getTransactionsByIbanList } from "@/api/transaction.js";
-import { cn } from "@/lib/utils";
 import { getAllBankAccounts } from "@/api/bankAccount";
 import { generateSingleAccountPDF } from "@/api/bankAccount";
 import TransactionList from "@/components/transactions/TransactionList.jsx";
@@ -37,14 +41,13 @@ import BankDetailsDisplay from "@/components/transactions/BankDetailsDisplay.jsx
 import AnalysisModal from "@/components/transactions/AnalysisModal.jsx";
 import DeleteAccountModal from "@/components/DeleteModal.jsx";
 import { getMe } from "@/api/auth.js";
-import { getTransactionByIban } from "@/api/transaction.js";
 import AppLayout from "@/components/AppLayout.jsx";
 import DepotCardForm from "@/components/DepotCardForm";
 import { getAllBankAccountsTransfert } from "@/api/bankAccount";
 import { fetchBeneficiaries } from "@/api/beneficiary.js";
 import VirementCardForm from "@/components/VirementCardForm.jsx";
-import { useSearchParams } from "react-router-dom";
 import ModalInfoBig from "@/components/transactions/ModalInfoBig.jsx";
+import { set } from "react-hook-form";
 
 const ActionButton = ({ icon: Icon, label, onClick }) => (
   <button
@@ -65,12 +68,7 @@ function BankAccount() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
-
-  useEffect(() => {
-    if (!location.state?.bankAccount) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [location.state, navigate]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [bankAccount, setBankAccount] = useState(
     location.state?.bankAccount || null
@@ -85,30 +83,70 @@ function BankAccount() {
   const [monthlyExpenses, setMonthlyExpenses] = useState(0);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [showAnalysis, setShowAnalysis] = useState(false);
+
   const spendingLimit = 2000;
   const spendingPercentage = (monthlyExpenses / spendingLimit) * 100;
-  const [createAccountIsVisible, setCreateAccountIsVisible] = useState(false);
+
   const [createTransactionIsVisible, setCreateTransactionIsVisible] =
     useState(false);
+
   const [allBankAccounts, setAllBankAccounts] = useState([]);
   const [allBeneficiaries, setAllBeneficiaries] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [defaultTab, setDefaultTab] = useState(
     searchParams.get("type") || "virement"
   );
 
-  useEffect(() => {
-    const defineDefaultTab = () => {
-      if (searchParams.get("type")) {
-        setDefaultTab(searchParams.get("type"));
-      } else {
-        setDefaultTab("depot");
-      }
-    };
+  const fetchAccountDetails = useCallback(async () => {
+    if (!user?.uid || !location.state?.bankAccount?.iban) return;
 
-    defineDefaultTab();
-  }, []);
+    try {
+      const data = await getAllBankAccounts(user.uid);
+      const accountsList = data.account || (Array.isArray(data) ? data : []);
+
+      if (Array.isArray(accountsList)) {
+        const freshAccountData = accountsList.find(
+          (acc) =>
+            String(acc.iban) === String(location.state?.bankAccount?.iban)
+        );
+
+        if (freshAccountData) {
+          console.log("✅ Compte mis à jour:", freshAccountData);
+          setBankAccount(freshAccountData);
+        }
+      }
+    } catch (error) {
+      console.error("❌ Erreur API:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user?.uid, location.state?.bankAccount?.iban]);
+
+  const fetchTransactions = useCallback(async () => {
+    if (!bankAccount?.iban) return;
+    try {
+      const data = await getTransactionsByIbanList([bankAccount.iban]);
+      setTransactions(data.transactions);
+      setMonthlyExpenses(data.expenses || 0);
+      setMonthlyIncome(data.income || 0);
+    } catch (error) {
+      console.error("Erreur transactions", error);
+    }
+  }, [bankAccount?.iban]);
+
+  useEffect(() => {
+    if (!location.state?.bankAccount) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [location.state, navigate]);
+
+  useEffect(() => {
+    if (searchParams.get("type")) {
+      setDefaultTab(searchParams.get("type"));
+    } else {
+      setDefaultTab("depot");
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (user?.uid) {
@@ -116,70 +154,39 @@ function BankAccount() {
         setAllBankAccounts(result);
       });
     }
-
     fetchBeneficiaries().then((result) => {
       setAllBeneficiaries(result);
     });
   }, [user?.uid]);
+
+  useEffect(() => {
+    fetchAccountDetails();
+  }, [fetchAccountDetails]);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions]);
 
   if (!defaultTab) return null;
 
-  useEffect(() => {
-    const fetchAccountDetails = async () => {
-      if (!user?.uid || !location.state?.bankAccount?.iban) return;
+  const handleTransactionSuccess = async (transaction) => {
+    const balance = transaction.type === "Espèces" || transaction.type === "Chèque" ? (parseFloat(bankAccount.balance) + transaction.amount).toString() : (parseFloat(bankAccount.balance) - transaction.amount).toString();
+    setBankAccount((prevAccount) => ({
+      ...prevAccount,
+      balance: balance,
+    })); 
+    console.log("Nouvelle transaction ajoutée:", transaction);
+    const transactionPlayload = {
+      ...transaction,
+      transaction_name: transaction.name,
+      type: transaction.type === "Espèces" || transaction.type === "Chèque" ? "credit" : "",
 
-      try {
-        const data = await getAllBankAccounts(user.uid);
-        const accountsList = data.account || (Array.isArray(data) ? data : []);
-
-        if (Array.isArray(accountsList)) {
-          const freshAccountData = accountsList.find(
-            (acc) =>
-              String(acc.iban) === String(location.state?.bankAccount?.iban)
-          );
-
-          if (freshAccountData) {
-            setBankAccount(freshAccountData);
-          } else {
-            console.warn("⚠️ Compte introuvable via l'API");
-          }
-        }
-      } catch (error) {
-        console.error("❌ Erreur API:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAccountDetails();
-  }, [user?.uid, location.state?.bankAccount?.iban]);
-
-  useEffect(() => {
-    if (user?.uid) {
-      getAllBankAccountsTransfert(user.uid).then((result) => {
-        setAllBankAccounts(result);
-      });
     }
-
-    fetchBeneficiaries().then((result) => {
-      setAllBeneficiaries(result);
-    });
-  }, [user?.uid]);
-
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      if (!bankAccount?.iban) return;
-      try {
-        const data = await getTransactionsByIbanList([bankAccount.iban]);
-        setTransactions(data.transactions);
-        setMonthlyExpenses(data.expenses || 0);
-        setMonthlyIncome(data.income || 0);
-      } catch (error) {
-        console.error("Erreur transactions", error);
-      }
-    };
-    fetchTransactions();
-  }, [bankAccount]);
+    setTransactions((prevTransactions) => [
+      transactionPlayload,
+      ...prevTransactions,
+    ]);
+  };
 
   const handleDownloadPDF = async () => {
     try {
@@ -397,7 +404,10 @@ function BankAccount() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <DepotCardForm allBankAccounts={allBankAccounts} />
+                    <DepotCardForm
+                      allBankAccounts={allBankAccounts}
+                      onSuccess={handleTransactionSuccess}
+                    />
                   </CardContent>
                 </TabsContent>
 
@@ -418,7 +428,10 @@ function BankAccount() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className={"pb-6"}>
-                    <VirementCardForm allBankAccounts={allBankAccounts} />
+                    <VirementCardForm
+                      allBankAccounts={allBankAccounts}
+                      onSuccess={handleTransactionSuccess}
+                    />
                   </CardContent>
                 </TabsContent>
               </TabsContents>

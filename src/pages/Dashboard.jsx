@@ -36,6 +36,7 @@ function Dashboard() {
     setCreateAccountIsVisible(false);
   };
 
+
   useEffect(() => {
     if (!user?.uid) return;
     getAllBankAccounts(user.uid).then((data) => {
