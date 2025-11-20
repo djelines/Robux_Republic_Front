@@ -48,7 +48,8 @@ function Transaction() {
   useEffect(() => {
     if (user?.uid) {
       getAllBankAccountsTransfert(user.uid).then((result) => {
-        setAllBankAccounts(result);
+        const allOpenBankAccounts = result?.filter((bankAccount) => bankAccount?.is_closed === false) ?? [];
+        setAllBankAccounts(allOpenBankAccounts)
       });
     }
 
