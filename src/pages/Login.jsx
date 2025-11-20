@@ -19,8 +19,9 @@ function Login() {
 
     const onSubmit = (values) => {
         signInUser(values).then((data) => {
+            console.log(data);
             if(data?.detail) {
-                setError(data);
+                setError(data?.detail);
                 return;
             }
 
