@@ -1,9 +1,11 @@
 import React from "react";
 import { deleteBankAccount } from "@/api/bankAccount.js";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function DeleteAccountModal({ open, onClose, iban }) {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
   if (!open) return null;
 
   const handleConfirm = async () => {

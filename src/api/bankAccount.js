@@ -45,6 +45,7 @@ export const getAllBankAccounts = async (uid) => {
 
         if (res.ok) {
             const data = await res.json();
+            console.log("Fetched bank accounts:", data);
             const notClosedAccount = Array.isArray(data)
                 ? data.filter((t) => t.is_closed === false)
                 : [];

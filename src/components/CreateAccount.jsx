@@ -21,7 +21,7 @@ export default function CreateAccountModal({ open, onClose, onSuccess }) {
     setErrorMessage(""); 
     const loaddata = {
       name: values.name,
-      uid: sessionStorage.getItem("access_token"),
+      uid: user?.uid,
     };
 
     try {
@@ -30,7 +30,18 @@ export default function CreateAccountModal({ open, onClose, onSuccess }) {
         setErrorMessage(result.error);
         return;
       }
-      onClose();
+
+      const mergedAccount = {
+        ...result.bank_account,
+        ...result.user_bank_account,  
+        id: result.bank_account.id    
+      };
+      if (onSuccess) {
+        console.log("Account created successfully"+ mergedAccount);
+        onSuccess(mergedAccount); 
+      } else {
+          onClose();
+      }
     } catch (error) {
       setErrorMessage("Erreur lors de la création du compte : " + error.message);
       console.error(error);
