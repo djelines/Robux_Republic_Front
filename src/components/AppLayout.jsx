@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { motion } from "framer-motion";
 import { ModeToggle } from "@/components/ui/modeToggle.jsx";
+import { useRef } from "react";
 
 export const Logo = () => {
   return (
@@ -49,11 +50,25 @@ export default function AppLayout({ children }) {
   const { user } = useUser();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const audioRef = useRef();
+
+  useEffect(() => {
+    audioRef.current = new Audio('/sounds/logout.mp3');
+  }, []);
 
   const disconnect = (e) => {
     if (e) e.preventDefault();
+
     sessionStorage.removeItem("access_token");
-    window.location.href = "/login";
+
+    // Reset du son + play
+    const audio = audioRef.current;
+    audio.currentTime = 0;
+    audio.play();
+
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 350);
   };
 
   useEffect(() => {
