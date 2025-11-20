@@ -180,7 +180,7 @@ function VirementCardForm({allBankAccounts , onSuccess}) {
                 </div>
 
                 <div className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-4 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-row items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-300 shrink-0">
+                    <div className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-blue-500 shrink-0">
                         <Landmark className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
 

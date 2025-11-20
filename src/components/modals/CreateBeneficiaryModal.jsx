@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {AlertTriangle, PlusCircle} from "lucide-react";
-import {RippleButton, RippleButtonRipples} from "@/components/animate-ui/components/buttons/ripple.jsx";
-import {createBeneficiary} from "@/api/beneficiary.js";
-import {createPortal} from "react-dom";
+import React, { useEffect, useState } from 'react';
+import { AlertTriangle, PlusCircle } from "lucide-react";
+import { RippleButton, RippleButtonRipples } from "@/components/animate-ui/components/buttons/ripple.jsx";
+import { createBeneficiary } from "@/api/beneficiary.js";
+import { createPortal } from "react-dom";
 
-function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen}) {
+function CreateBeneficiaryModal({ ibanParams, setBeneficiaries, isOpen, setIsOpen }) {
 
     const [name, setName] = useState("")
     const [iban, setIban] = useState("")
@@ -13,7 +13,7 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
     useEffect(() => {
         const loadIban = () => {
             console.log(ibanParams);
-            if(ibanParams) {
+            if (ibanParams) {
                 setIban(ibanParams)
             }
         }
@@ -24,7 +24,7 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
     const handleSubmit = async () => {
         try {
             const newBeneficiary = await createBeneficiary(name, iban)
-            if(setBeneficiaries){
+            if (setBeneficiaries) {
                 setBeneficiaries(prev => [...prev, newBeneficiary])
             }
             setIsOpen(false)
@@ -37,10 +37,10 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
         }
     }
 
-    if(!isOpen) return null;
+    if (!isOpen) return null;
 
     const contentType = (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50 ">
             <div
                 className="
       relative
@@ -53,7 +53,7 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
       shadow-[0_0_20px_rgba(0,255,200,0.25)]
     "
                 style={{
-                    background: "linear-gradient(135deg, #00f6ff, #8d00ff)", // Bordure néon
+                    background: "linear-gradient(135deg, #00f6ff, #8d00ff)", 
                 }}
             >
                 <div
@@ -62,16 +62,16 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
         rounded-3xl
         p-8
         border border-gray-200
-        bg-gradient-to-br from-white to-gray-50
         hover:shadow-xl transition-shadow
+        dark:bg-gray-800 dark:border-gray-700
       "
                 >
 
-                    <div className="flex items-center gap-3 mb-6 pb-3 border-b border-gray-200">
-                        <div className="p-2 rounded-xl bg-indigo-100 border border-indigo-200">
+                    <div className="flex items-center gap-3 mb-6 pb-3 border-b border-gray-200  ">
+                        <div className="p-2 rounded-xl bg-indigo-100 border border-indigo-200 dark:bg-gray-800 dark:border-gray-700">
                             <PlusCircle className="w-6 h-6 text-indigo-600" />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-800">
+                        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
                             Ajouter un Bénéficiaire
                         </h2>
                     </div>
@@ -89,6 +89,7 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
           focus:outline-none
           focus:ring-2
           focus:ring-indigo-400
+          dark:bg-gray-800 dark:text-white
         "
                     />
 
@@ -105,6 +106,7 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
           focus:outline-none
           focus:ring-2
           focus:ring-indigo-400
+          dark:bg-gray-800 dark:text-white
         "
                     />
 
@@ -117,6 +119,7 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
           mb-4
           border border-red-200
           flex items-center gap-2
+          dark:bg-gray-800 dark:text-white
         ">
                             <AlertTriangle className="w-5 h-5" />
                             {error}
@@ -132,6 +135,8 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
             bg-gray-100
             hover:bg-gray-200
             border border-gray-300
+            dark:bg-gray-800 dark:text-white
+            dark:hover:bg-gray-700
           "
                         >
                             Annuler
@@ -147,6 +152,7 @@ function CreateBeneficiaryModal({ibanParams, setBeneficiaries, isOpen, setIsOpen
             hover:bg-indigo-700
             flex items-center gap-2
             shadow-md
+        
           "
                         >
                             <PlusCircle className="w-5 h-5" />

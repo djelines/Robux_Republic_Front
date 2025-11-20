@@ -50,7 +50,7 @@ const ReadOnlyField = ({
           }
         `}
       >
-        <div className="flex items-center gap-3 overflow-hidden w-full">
+        <div className="flex items-center gap-3 overflow-hidden w-full dark:text-gray-900">
           {Icon && (
             <div className="p-1.5 rounded-lg bg-white text-gray-400 shadow-sm border border-gray-100 shrink-0 dark:bg-gray-800 dark:border-neutral-700 dark:text-gray-500">
               <Icon size={16} />
@@ -116,7 +116,7 @@ export default function TransactionDetailsModal({
   return (
     <ModalInfo open={open} onClose={onClose} title="Détails de l'opération">
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-1 dark:bg-gray-800 dark:border-neutral-700">
-        <div className="p-4">
+        <div className="p-4 ">
           <ReadOnlyField
             label="Montant de la transaction"
             value={formattedAmount}
