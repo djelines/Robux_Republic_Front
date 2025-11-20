@@ -59,6 +59,7 @@ export const getAllBankAccounts = async (uid) => {
     }
 };
 
+// Fonction pour créer un compte bancaire
 export const createBankAccount = async (account) => {
   try {
     const res = await fetch("http://localhost:8000/bank_account", {

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { fetchBeneficiaries, createBeneficiary, deleteBeneficiary } from '@/api/beneficiary.js'
+import { fetchBeneficiaries, createBeneficiary } from '@/api/beneficiary.js'
 import { RippleButton, RippleButtonRipples } from '@/components/animate-ui/components/buttons/ripple'
-import { PlusCircle, Trash2, UserMinus, User, AlertTriangle, ChevronsDown, Grid } from "lucide-react";
-import GridBackground from '@/components/ui/GridBackground.jsx';
+import { PlusCircle, UserMinus, User, AlertTriangle, ChevronsDown } from "lucide-react";
 import BeneficiaryCard from '@/components/BeneficiaryCard.jsx';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/components/layouts/AppLayout.jsx';
 
 function Beneficiary() {
 
@@ -33,6 +32,7 @@ function Beneficiary() {
       });
   }, []);
 
+  // Fonction pour créer un beneficiaire
   const handleSubmit = async () => {
     try {
       const newBeneficiary = await createBeneficiary(name, iban);

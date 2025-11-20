@@ -26,6 +26,7 @@ export const getTransactionByIban = async (iban) => {
   }
 };
 
+// Fonction pour récuperer toutes les transactions formatté a l'affichage
 const processAllTransactions = (apiResults) => {
   let finalTransactionList = [];
 
@@ -118,8 +119,7 @@ export const getTransactionsByIbanList = async (ibanList) => {
 
     const successfulResults = results.filter(Boolean);
 
-    const allProcessedTransactions = processAllTransactions(successfulResults);
-    return allProcessedTransactions;
+    return processAllTransactions(successfulResults);
   } catch (error) {
     console.error(
       "Erreur lors de la récupération ou du traitement des transactions:",
@@ -130,7 +130,7 @@ export const getTransactionsByIbanList = async (ibanList) => {
 };
 
 
-
+// Fonction pour créer une transaction
 export const createTransaction = async (transaction) => {
 
     try {
@@ -151,6 +151,7 @@ export const createTransaction = async (transaction) => {
     }
 }
 
+// Fonction pour annuler une transaction
 export const cancelTransaction = async (transaction_id) => {
     try {
         const res = await fetch(`http://localhost:8000/transactions/transaction/${transaction_id}/cancel`, {

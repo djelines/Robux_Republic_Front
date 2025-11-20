@@ -6,19 +6,17 @@ import { signInUser } from "@/api/auth.js";
 import { cn } from "@/lib/utils.js";
 import { useUser } from "@/context/UserContext.jsx";
 import { FireworksBackground } from '@/components/animate-ui/components/backgrounds/fireworks';
-import {Button} from "@/components/animate-ui/components/buttons/button.jsx";
 import HomeLayout from "@/components/layouts/HomeLayout.jsx";
-import {useNavigate} from "react-router-dom";
 
 function Login() {
 
-    const { control, handleSubmit, getValues } = useForm();
+    const { control, handleSubmit } = useForm();
 
     const {setUser} = useUser();
-    const navigate = useNavigate();
 
     const [error, setError] = React.useState(null);
 
+    // Fonction pour connecter l'utilisateur
     const onSubmit = (values) => {
         signInUser(values).then((data) => {
             console.log(data);

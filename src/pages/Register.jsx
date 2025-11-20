@@ -9,8 +9,6 @@ import { FireworksBackground } from '@/components/animate-ui/components/backgrou
 import HomeLayout from "@/components/layouts/HomeLayout.jsx";
 
 function Register() {
-
-
     const { control, handleSubmit, getValues } = useForm();
 
     const navigate = useNavigate();

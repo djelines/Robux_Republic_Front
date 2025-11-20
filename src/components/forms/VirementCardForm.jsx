@@ -9,14 +9,13 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select.jsx";
-import SearchBar from "@/components/SearchBar.jsx";
 import { Button } from "@/components/animate-ui/components/buttons/button.jsx";
 import { Controller, useForm } from "react-hook-form";
 import { cancelTransaction, createTransaction } from "@/api/transaction.js";
 import { MultiStepLoader } from "@/components/ui/multi-step-loader.jsx";
 import Autocomplete from "@/components/ui/Autocomplete.jsx";
 import { fetchBeneficiaries } from "@/api/beneficiary.js";
-import FinishedTransactionModal from "@/components/FinishedTransactionModal.jsx";
+import FinishedTransactionModal from "@/components/modals/FinishedTransactionModal.jsx";
 import { Tooltip, TooltipPanel, TooltipTrigger } from "@/components/animate-ui/components/base/tooltip.jsx";
 import CreateBeneficiaryModal from "@/components/modals/CreateBeneficiaryModal.jsx";
 

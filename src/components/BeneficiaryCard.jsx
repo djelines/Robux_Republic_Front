@@ -19,7 +19,7 @@ const BeneficiaryCard = ({ beneficiary, setError, setBeneficiaries }) => {
 
 
     return (
-        <div className="group relative bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col dark:bg-gray-800">
+        <div className="group relative bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col dark:border-gray-700 dark:bg-gray-800">
 
             {/* Decorative Header */}
             <div className={`h-28 bg-gradient-to-r ${getGradient(beneficiary.id.toString())} relative`}>

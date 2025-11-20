@@ -11,10 +11,10 @@ import {
   CircleQuestionMark,
 } from "lucide-react";
 import { useUser } from "@/context/UserContext.jsx";
-import { cn } from "@/lib/utils";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils.js";
+import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar.jsx";
 import { motion } from "framer-motion";
-import { ModeToggle } from "@/components/ui/modeToggle.jsx";
+import { ModeToggle } from "@/components/ui/theme/modeToggle.jsx";
 import { useRef } from "react";
 
 export const Logo = () => {
@@ -38,7 +38,7 @@ export const Logo = () => {
 export const LogoIcon = () => {
   return (
     <Link
-      to="/dashboard"
+      to="/"
       className="font-normal relative flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
       <img src={"/robux_republic_logo.png"} className={"w-10"} />
@@ -72,7 +72,11 @@ export default function AppLayout({ children }) {
   };
 
   useEffect(() => {
-    setSidebarOpen(false);
+    const closeSidebar = () => {
+      setSidebarOpen(false);
+    }
+
+    closeSidebar();
   }, [location.pathname]);
 
   const today = new Date().toLocaleDateString("fr-FR", {

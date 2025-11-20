@@ -39,15 +39,13 @@ import BankCard from "@/components/Card.jsx";
 import ModalInfo from "@/components/transactions/ModalInfo.jsx";
 import BankDetailsDisplay from "@/components/transactions/BankDetailsDisplay.jsx";
 import AnalysisModal from "@/components/transactions/AnalysisModal.jsx";
-import DeleteAccountModal from "@/components/DeleteModal.jsx";
+import DeleteAccountModal from "@/components/modals/DeleteModal.jsx";
 import { getMe } from "@/api/auth.js";
-import AppLayout from "@/components/AppLayout.jsx";
-import DepotCardForm from "@/components/DepotCardForm";
-import { getAllBankAccountsTransfert } from "@/api/bankAccount";
+import AppLayout from "@/components/layouts/AppLayout.jsx";
+import DepotCardForm from "@/components/forms/DepotCardForm.jsx";
 import { fetchBeneficiaries } from "@/api/beneficiary.js";
-import VirementCardForm from "@/components/VirementCardForm.jsx";
+import VirementCardForm from "@/components/forms/VirementCardForm.jsx";
 import ModalInfoBig from "@/components/transactions/ModalInfoBig.jsx";
-import { set } from "react-hook-form";
 import {enrichTransactions} from "@/lib/utils.js";
 
 const ActionButton = ({ icon: Icon, label, onClick }) => (
@@ -69,7 +67,7 @@ function BankAccount() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [bankAccount, setBankAccount] = useState(
     location.state?.bankAccount || null
@@ -98,6 +96,7 @@ function BankAccount() {
     searchParams.get("type") || "virement"
   );
 
+  // Recuperer
   const fetchAccountDetails = useCallback(async () => {
     if (!user?.uid || !location.state?.bankAccount?.iban) return;
 
@@ -112,17 +111,18 @@ function BankAccount() {
         );
 
         if (freshAccountData) {
-          console.log("✅ Compte mis à jour:", freshAccountData);
+          console.log("Compte mis à jour:", freshAccountData);
           setBankAccount(freshAccountData);
         }
       }
     } catch (error) {
-      console.error("❌ Erreur API:", error);
+      console.error("Erreur API:", error);
     } finally {
       setIsLoading(false);
     }
   }, [user?.uid, location.state?.bankAccount?.iban]);
 
+  // Recuperer les transactions
   const fetchTransactions = useCallback(async () => {
     if (!bankAccount?.iban) return;
     try {
@@ -134,6 +134,7 @@ function BankAccount() {
       console.error("Erreur transactions", error);
     }
   }, [bankAccount?.iban]);
+
 
   useEffect(() => {
     if (!location.state?.bankAccount) {
@@ -149,6 +150,7 @@ function BankAccount() {
     }
   }, [searchParams]);
 
+  // Fetch les beneficiaires et les comptes bancaires ouvert (de l'utilisateur)
   useEffect(() => {
     if (user?.uid) {
       getAllBankAccounts(user.uid).then((result) => {
@@ -171,6 +173,7 @@ function BankAccount() {
 
   if (!defaultTab) return null;
 
+  // Fonction pour mettre a jour dynamiquement le compte bancaire et les transactions
   const handleTransactionSuccess = async (transaction) => {
     const balance = transaction.type === "Espèces" || transaction.type === "Chèque" ? (parseFloat(bankAccount.balance) + transaction.amount).toString() : (parseFloat(bankAccount.balance) - transaction.amount).toString();
     setBankAccount((prevAccount) => ({
@@ -190,6 +193,7 @@ function BankAccount() {
     ]);
   };
 
+  // Fonction pour telecharger le pdf
   const handleDownloadPDF = async () => {
     try {
       const userInfo = await getMe();
@@ -200,6 +204,7 @@ function BankAccount() {
     }
   };
 
+  // Montre le chargement de la page
   if (isLoading || !bankAccount) {
     return (
       <AppLayout>
@@ -212,6 +217,7 @@ function BankAccount() {
     );
   }
 
+  // Affiche seulement le bon nombre de transactions a la fois
   const displayedTransactions = isAllTransactionsVisible
     ? transactions
     : transactions

@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import GridBackground from "@/components/ui/GridBackground.jsx";
 import { motion } from "motion/react";
 import { LayoutTextFlip } from "@/components/ui/layout-text-flip.jsx";
-import { ArrowRight, ArrowUpDown, LogIn } from "lucide-react";
+import { ArrowRight, ArrowUpDown, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/context/UserContext.jsx";
 import BankCard from "@/components/Card.jsx";
 import CardSwap, { Card } from "@/components/CardSwap.jsx";
 import HomeLayout from "@/components/layouts/HomeLayout.jsx";
+import {cn} from "@/lib/utils.js";
 
 function Home() {
   const navigate = useNavigate();
@@ -57,7 +58,15 @@ function Home() {
   return (
     <>
       <HomeLayout/>
-      <GridBackground>
+
+      <div
+          className={cn(
+              "absolute inset-0 z-0 pointer-events-none",
+              "[background-size:40px_40px]",
+              "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
+              "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]"
+          )}
+      />
         <div className={"flex flex-col justify-between min-h-screen py-10 overflow-hidden"}>
           <div className={"flex flex-col gap-1 items-center h-full my-auto"}>
             <h1 className={"relative z-20 font-title py-8 !text-5xl !font-bold sm:!text-6xl md:!text-7xl flex items-baseline gap-6"}>
@@ -68,7 +77,7 @@ function Home() {
                 />
               </motion.div>
             </h1>
-            <p className={"relative z-20 font-text text-gray-600 md:text-lg text-md max-w-2xl text-center px-4"}>
+            <p className={"relative z-20 font-text text-gray-600 md:text-lg text-md max-w-2xl text-center px-4 dark:text-gray-400"}>
               Bienvenue à Robux Republic. La banque nouvelle génération pour les joueurs. Transformez vos Robux en véritable capital.
             </p>
 
@@ -76,45 +85,62 @@ function Home() {
 
           <div className={"relative z-20 w-full max-w-6xl mx-auto px-5 gap-10 flex flex-col md:flex-row justify-center md:justify-around items-center mt-20 md:mt-auto font-text font-medium"}>
 
-            <div className={"bg-gray-100 dark:bg-[#171717] flex flex-col gap-3 rounded-[3rem] px-3 py-3 transition-colors duration-300 shadow-lg"}>
-              <div className={"bg-white dark:bg-neutral-800 px-8 py-5 rounded-4xl gap-7 flex flex-col transition-colors duration-300"}>
+            <div className="bg-white dark:bg-gray-800 rounded-[2rem] p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-neutral-800 h-full flex flex-col transition-colors duration-300">
+
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-[1.5rem] p-6 flex flex-col gap-6 relative transition-colors duration-300">
+
                 <div>
-                  <h3 className={"text-lg mb-1.5 text-gray-500 dark:text-gray-400"}>De {convertMoney.top.money}</h3>
-                  <div className={"flex gap-3 items-center"}>
-                    {convertMoney.top.symbol}
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">De {convertMoney.top.money}</h3>
+                  <div className="flex items-center gap-3 bg-white dark:bg-gray-600 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-500 transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-500 flex items-center justify-center shrink-0">
+                      {convertMoney.top.symbol}
+                    </div>
                     <input
-                        placeholder={"Votre chiffre"}
+                        placeholder="0"
                         onChange={(e) => updateConvertedMoney(e.target.value)}
-                        className={"text-2xl font-title max-w-45 focus-visible:outline-none bg-transparent dark:text-white dark:placeholder:text-gray-600"}
+                        className="text-2xl font-bold bg-transparent outline-none w-full text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-500"
                         value={convertMoney.top.value}
                     />
                   </div>
                 </div>
 
-                <div className={"flex items-center justify-center bg-blue-600 hover:bg-blue-700 transition rounded-full mx-auto p-2 cursor-pointer w-10 h-10 shadow-lg shadow-blue-200"} onClick={handleSwap}>
-                  <ArrowUpDown color={"white"} size={20} />
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                  <div
+                      onClick={handleSwap}
+                      className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl shadow-md shadow-blue-500/30 border-[6px] border-gray-50 dark:border-gray-700 cursor-pointer transition-all active:scale-90 active:rotate-180"
+                  >
+                    <ArrowUpDown size={20} strokeWidth={3} />
+                  </div>
                 </div>
 
                 <div>
-                  <h3 className={"text-lg mb-1.5 text-gray-500 dark:text-gray-400"}>A {convertMoney.bottom.money}</h3>
-                  <div className={"flex gap-0.5 items-center"}>
-                    {convertMoney.bottom.symbol}
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Vers {convertMoney.bottom.money}</h3>
+                  <div className="flex items-center gap-3 bg-white dark:bg-gray-600 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-500 transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-500 flex items-center justify-center shrink-0">
+                      {convertMoney.bottom.symbol}
+                    </div>
                     <input
-                        placeholder={"Votre chiffre"}
-                        onChange={(e) => updateConvertedMoney(e.target.value)}
-                        className={`text-2xl mr-auto max-w-45 font-title focus-visible:outline-none bg-transparent dark:text-white`}
-                        readOnly={true}
+                        placeholder="0.00"
+                        readOnly
+                        className="text-2xl font-bold bg-transparent outline-none w-full text-gray-900 dark:text-white cursor-default"
                         value={convertMoney.bottom.value}
                     />
                   </div>
                 </div>
               </div>
 
-              <div className={"bg-white dark:bg-neutral-800 py-3 rounded-b-4xl rounded-t-md flex flex-col items-center font-text transition-colors duration-300"}>
-                <p className={"text-md font-medium text-gray-500 dark:text-gray-400"}>Indice de change</p>
-                <div className={"flex gap-1 dark:text-white"}>
-                  <div className={"flex gap-1 items-center"}><p>1</p><img src={"robux_logo.png"} alt={"Robux"} className={"max-w-4"} /></div>
-                  <div className={"flex gap-1 items-center"}><p>0.01</p><span className={"text-lg"}>€</span></div>
+              <div className="mt-4 bg-white dark:bg-gray-700 py-4 rounded-2xl border border-gray-50 dark:border-gray-600 flex flex-col items-center font-sans transition-colors duration-300">
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Indice de change</p>
+                <div className="flex items-center gap-2 text-gray-900 dark:text-white font-bold bg-gray-50 dark:bg-gray-600 px-4 py-1.5 rounded-full">
+                  <div className="flex gap-1 items-center">
+                    <span>1</span>
+                    <Coins size={14} className="text-gray-500 dark:text-gray-300" />
+                  </div>
+                  <span className="text-gray-300 dark:text-gray-600">=</span>
+                  <div className="flex gap-1 items-center">
+                    <span>0.01</span>
+                    <span>€</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,7 +183,6 @@ function Home() {
             </div>
           </div>
         </div>
-      </GridBackground>
     </>
   );
 }

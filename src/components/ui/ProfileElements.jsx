@@ -1,12 +1,7 @@
-import { cn } from "@/lib/utils";
 import React from "react";
 import PersonalInfoCard from "@/components/ui/PersonalInfoCard.jsx";
 import { CreditCard, LogOut } from "lucide-react";
-import { motion } from "framer-motion";
-import { LayoutTextFlip } from "@/components/ui/layout-text-flip.jsx";
 import { useUser } from "@/context/UserContext.jsx";
-import DeleteAccount from "@/components/DeleteModal.jsx";
-import Createaccount from "@/components/CreateAccount.jsx";
 import { Bell, Gamepad2 } from "lucide-react";
 
 export default function BodyProfile() {

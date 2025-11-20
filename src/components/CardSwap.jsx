@@ -1,13 +1,11 @@
 import React, { Children, cloneElement, forwardRef, isValidElement, useEffect, useMemo, useRef } from 'react';
 import gsap from 'gsap';
 
-// Card Wrapper interne
 export const Card = forwardRef(({ customClass, ...rest }, ref) => (
     <div
         ref={ref}
         {...rest}
         className={`absolute top-1/2 left-1/2 rounded-3xl [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] shadow-2xl ${customClass ?? ''} ${rest.className ?? ''}`.trim()}
-        // J'ai retiré bg-black et border-white pour laisser BankCard gérer le style
     />
 ));
 Card.displayName = 'Card';
@@ -33,14 +31,14 @@ const placeNow = (el, slot, skew) =>
     });
 
 const CardSwap = ({
-                    width = 450, // Largeur ajustée par défaut
-                    height = 300, // Hauteur ajustée par défaut
-                    cardDistance = 40, // Réduit pour un empilement plus serré
+                    width = 450,
+                    height = 300,
+                    cardDistance = 40,
                     verticalDistance = 50,
                     delay = 3500,
                     pauseOnHover = true,
                     onCardClick,
-                    skewAmount = 3, // Skew plus subtil
+                    skewAmount = 3,
                     easing = 'elastic',
                     children
                   }) => {
@@ -91,8 +89,8 @@ const CardSwap = ({
       tlRef.current = tl;
 
       tl.to(elFront, {
-        y: '+=300', // Moins de chute pour rester dans le cadre visuel
-        x: '-=50', // Légère déviation gauche pour le réalisme
+        y: '+=300',
+        x: '-=50',
         rotation: -10,
         duration: config.durDrop,
         ease: config.ease
@@ -162,7 +160,6 @@ const CardSwap = ({
           ? cloneElement(child, {
             key: i,
             ref: refs[i],
-            // On force la taille des enfants pour matcher le container
             style: { width: '100%', height: 'auto', ...(child.props.style ?? {}) },
             onClick: e => {
               child.props.onClick?.(e);
@@ -174,7 +171,6 @@ const CardSwap = ({
   return (
       <div
           ref={container}
-          // ICI : Changement majeur -> relative pour respecter le flex parent, suppression des translates excessifs
           className="relative flex items-center justify-center perspective-[1000px] overflow-visible"
           style={{ width, height }}>
         {rendered}

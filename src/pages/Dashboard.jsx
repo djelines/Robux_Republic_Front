@@ -6,9 +6,9 @@ import { getTransactionsByIbanList } from "@/api/transaction.js";
 import TransactionList from "@/components/transactions/TransactionList.jsx";
 import BankCard from "@/components/Card.jsx";
 import { useNavigate } from "react-router-dom";
-import CreateAccountModal from "@/components/CreateAccount.jsx";
+import CreateAccountModal from "@/components/modals/CreateAccount.jsx";
 
-import AppLayout from "@/components/AppLayout.jsx";
+import AppLayout from "@/components/layouts/AppLayout.jsx";
 import {enrichTransactions} from "@/lib/utils.js";
 import fetchBeneficiaries from "@/api/beneficiary.js";
 
@@ -34,11 +34,13 @@ function Dashboard() {
   const [isAllTransactionsVisible, setIsAllTransactionsVisible] = useState(false);
   const [beneficiaryAccounts, setBeneficiaryAccounts] = useState([]);
 
+  // Ajoute dynamiquement le nouveau compte banquaire
   const handleAccountCreated = (newAccount) => {
     setBankAccounts((prevAccounts) => [...prevAccounts, newAccount]);
     setCreateAccountIsVisible(false);
   };
 
+  // Récupere les benecifiaires de l'utilisateur connecté
   useEffect(() => {
       fetchBeneficiaries().then((result) => {
         if(result){
@@ -47,6 +49,7 @@ function Dashboard() {
       })
   }, []);
 
+  // Récuperer tout les comptes bancaires actifs de l'utilisateurs
   useEffect(() => {
     if (!user?.uid) return;
     getAllBankAccounts(user.uid).then((data) => {
@@ -58,6 +61,7 @@ function Dashboard() {
     });
   }, [user.uid]);
 
+  // récupere toutes les transactions et ajoute les noms des bénéficiaires
   useEffect(() => {
     const fetchTransactions = async () => {
       if (bankAccounts.length === 0) {
@@ -71,10 +75,12 @@ function Dashboard() {
 
         setTransactions(enrichTransactions(data.transactions, bankAccounts, beneficiaryAccounts));
       } catch (error) {
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchTransactions();
   }, [bankAccounts]);
 
@@ -88,6 +94,7 @@ function Dashboard() {
     );
   }
 
+  // Limite l'affichage ou non des comptes bancaires et transactions
   const displayedBankAccounts = isAllAccountsVisible ? bankAccounts : bankAccounts.slice(0, 5);
   const displayedTransactions = isAllTransactionsVisible ? transactions : transactions ? transactions.slice(0, 10) : [];
 

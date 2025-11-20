@@ -13,7 +13,7 @@ import {
 import {Input} from "@/components/ui/input.jsx";
 import {cancelTransaction, createTransaction} from "@/api/transaction.js";
 import {getRobuxBankAccount} from "@/api/bankAccount.js";
-import FinishedTransactionModal from "@/components/FinishedTransactionModal.jsx";
+import FinishedTransactionModal from "@/components/modals/FinishedTransactionModal.jsx";
 import {MultiStepLoader} from "@/components/ui/multi-step-loader.jsx";
 import {Button} from "@/components/animate-ui/components/buttons/button.jsx";
 

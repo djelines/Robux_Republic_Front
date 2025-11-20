@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-import SimpleModal from "@/components/ModalCreateAccount.jsx";
+import SimpleModal from "@/components/modals/ModalCreateAccount.jsx";
 import { Controller, useForm } from "react-hook-form";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils.js";
 import { createBankAccount } from "@/api/bankAccount.js";
 import { useUser } from "@/context/UserContext.jsx";
 

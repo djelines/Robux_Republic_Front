@@ -17,21 +17,19 @@ import {
 } from "@/components/ui/card.jsx";
 import { getAllBankAccountsTransfert } from "@/api/bankAccount.js";
 import { useUser } from "@/context/UserContext.jsx";
-import { fetchBeneficiaries } from "@/api/beneficiary.js";
-import VirementCardForm from "@/components/VirementCardForm.jsx";
-import DepotCardForm from "@/components/DepotCardForm.jsx";
+import VirementCardForm from "@/components/forms/VirementCardForm.jsx";
+import DepotCardForm from "@/components/forms/DepotCardForm.jsx";
 
-import AppLayout from "@/components/AppLayout.jsx";
+import AppLayout from "@/components/layouts/AppLayout.jsx";
 
 function Transaction() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { user } = useUser();
 
   const [defaultTab, setDefaultTab] = useState(
     searchParams.get("type") || "virement"
   );
   const [allBankAccounts, setAllBankAccounts] = useState([]);
-  const [allBeneficiaries, setAllBeneficiaries] = useState([]);
 
   useEffect(() => {
     const defineDefaultTab = () => {
@@ -52,10 +50,6 @@ function Transaction() {
         setAllBankAccounts(allOpenBankAccounts)
       });
     }
-
-    fetchBeneficiaries().then((result) => {
-      setAllBeneficiaries(result);
-    });
   }, [user?.uid]);
 
   if (!defaultTab) return null;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Navbar, NavbarButton, NavbarLogo, NavBody} from "@/components/ui/resizable-navbar.jsx";
 import {useUser} from "@/context/UserContext.jsx";
-import {ModeToggle} from "@/components/ui/modeToggle.jsx";
+import {ModeToggle} from "@/components/ui/theme/modeToggle.jsx";
 
 function HomeLayout({children}) {
 

@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import {useUser} from "@/context/UserContext.jsx";
 
 const AuthRoute = () => {

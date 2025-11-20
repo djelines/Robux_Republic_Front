@@ -2,7 +2,7 @@
 import React from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from "@/lib/theme-provider.jsx"; // Ton provider actuel
-import { ThemeToggler } from '@/components/animate-ui/primitives/effects/theme-toggler'; // Ton chemin vers l'effet
+import { ThemeToggler } from '@/components/animate-ui/primitives/effects/theme-toggler.jsx'; // Ton chemin vers l'effet
 
 export const ModeToggle = () => {
     const { theme, resolvedTheme, setTheme } = useTheme();
