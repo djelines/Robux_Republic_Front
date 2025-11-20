@@ -154,6 +154,7 @@ function Beneficiary() {
             hover:border-indigo-400 hover:bg-indigo-50/40
             cursor-pointer transition
             dark:bg-gray-800 dark:border-gray-600 dark:hover:border-indigo-500
+            min-h-[300px]
           "
         >
           <PlusCircle className="w-10 h-10 text-indigo-500 mb-2" />
