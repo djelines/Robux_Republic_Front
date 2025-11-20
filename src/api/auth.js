@@ -20,6 +20,8 @@ export const signUpUser = async (
             })
         })
 
+        return res.json();
+
     } catch (error) {
         console.log(error)
     }
