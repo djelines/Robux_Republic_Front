@@ -16,6 +16,7 @@ export function enrichTransactions(transactions, userBankAccounts, beneficiaries
       names[account.iban_to] = account.name;
     })
 
+
   console.log(names);
 
   return transactions.map(transaction => {
