@@ -32,5 +32,6 @@ jobs:
     - name: create image
       run: docker build -t bankFrontend .
     - name: tag image
-      run: docker tag bankFrontend production/bankFrontend
-      run: docker push production/bankFrontend
+      run: docker tag bankFrontend klfben/frontendbank
+      run: docker push klfben/frontendbank
+  
