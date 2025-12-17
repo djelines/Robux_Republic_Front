@@ -1,0 +1,18 @@
+services:
+  # --- FRONTEND (React) ---
+  frontend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - VITE_BASE_API_URL=https://robux-republic.onrender.com
+    environment:
+      - VITE_BASE_API_URL=https://robux-republic.onrender.com
+    container_name: react_app
+    restart: always
+    ports:
+      - "3000:3000" 
+networks:
+  reseau_partage:
+    external: true
+    name: global_network

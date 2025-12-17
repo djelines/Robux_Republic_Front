@@ -21,5 +21,4 @@ COPY --chown=node:node eslint.config.js ./
 # Expose port 3000 for the application
 EXPOSE 3000
 # Start the application
-CMD ["npm", "start"]
-
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]

@@ -1,10 +1,11 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 // fonction pour récupérer tous les comptes bancaires d'un utilisateur pour les transferts
 export const getAllBankAccountsTransfert = async (uid) => {
     try {
-        const res = await fetch("http://localhost:8000/bank_account/all-bank-accounts/" + uid, {
+        const res = await fetch(`${API_BASE_URL}/bank_account/all-bank-accounts/` + uid, {
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem("access_token")}`
             }
@@ -21,7 +22,7 @@ export const getAllBankAccountsTransfert = async (uid) => {
 // fonction pour récupérer le compte bancaire Robux
 export const getRobuxBankAccount = async () => {
     try {
-        const res = await fetch("http://localhost:8000/bank_account/mother-bank-account", {
+        const res = await fetch(`${API_BASE_URL}/bank_account/mother-bank-account`, {
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem("access_token")}`
             }
@@ -37,7 +38,7 @@ export const getRobuxBankAccount = async () => {
 // fonction pour récupérer tous les comptes bancaires d'un utilisateur
 export const getAllBankAccounts = async (uid) => {
     try {
-        const res = await fetch("http://localhost:8000/bank_account/all-bank-accounts/" + uid, {
+        const res = await fetch(`${API_BASE_URL}/bank_account/all-bank-accounts/` + uid, {
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem("access_token")}`
             }
@@ -62,7 +63,7 @@ export const getAllBankAccounts = async (uid) => {
 // Fonction pour créer un compte bancaire
 export const createBankAccount = async (account) => {
   try {
-    const res = await fetch("http://localhost:8000/bank_account", {
+    const res = await fetch(`${API_BASE_URL}/bank_account`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -87,7 +88,7 @@ export const createBankAccount = async (account) => {
 // fonction pour supprimer un compte bancaire
 export const deleteBankAccount = async (iban) => {
     try {
-        const res = await fetch(`http://localhost:8000/bank_account/close/${iban}`, {
+        const res = await fetch(`${API_BASE_URL}/bank_account/close/${iban}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

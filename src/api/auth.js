@@ -2,11 +2,14 @@ import {useUser} from "@/context/UserContext.jsx";
 import { Navigate } from "react-router-dom";
 
 // fonction pour inscrire un nouvel utilisateur
+
+const API_BASE_URL = import.meta.env.VITE_BASE_API_URL || "http://localhost:8000";
+
 export const signUpUser = async (
     user
 ) => {
     try {
-        const res = await fetch("http://localhost:8000/auth/signup", {
+        const res = await fetch(`${API_BASE_URL}/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -32,7 +35,7 @@ export const signInUser = async (
     request
 )=> {
     try {
-        const res = await fetch("http://localhost:8000/auth/login", {
+        const res = await fetch(`${API_BASE_URL}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -62,7 +65,7 @@ export const signInUser = async (
 // fonction pour récupérer les informations de l'utilisateur connecté
 export const getMe = async() => {
     try {
-        const res = await fetch("http://localhost:8000/auth/me", {
+        const res = await fetch(`${API_BASE_URL}/auth/me`, {
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem("access_token")}`
             }

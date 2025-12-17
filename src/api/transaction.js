@@ -1,8 +1,9 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 // fonction pour récupérer les transactions par IBAN
 export const getTransactionByIban = async (iban) => {
   try {
     const res = await fetch(
-      "http://localhost:8000/transactions/transactions/" + iban,
+      `${API_BASE_URL}/transactions/transactions/` + iban,
       {
         headers: {
           authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
@@ -134,7 +135,7 @@ export const getTransactionsByIbanList = async (ibanList) => {
 export const createTransaction = async (transaction) => {
 
     try {
-        const res = await fetch("http://localhost:8000/transactions/transactions", {
+        const res = await fetch(`${API_BASE_URL}/transactions/transactions`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -154,7 +155,7 @@ export const createTransaction = async (transaction) => {
 // Fonction pour annuler une transaction
 export const cancelTransaction = async (transaction_id) => {
     try {
-        const res = await fetch(`http://localhost:8000/transactions/transaction/${transaction_id}/cancel`, {
+        const res = await fetch(`${API_BASE_URL}/transactions/transaction/${transaction_id}/cancel`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

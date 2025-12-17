@@ -1,7 +1,9 @@
 // Fonction pour récupérer tous les bénéficiaires
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 export async function fetchBeneficiaries() {
     try {
-        const response = await fetch('http://127.0.0.1:8000/beneficiaires/all-beneficiaries', {
+        const response = await fetch(`${API_BASE_URL}/beneficiaires/all-beneficiaries`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +32,7 @@ export default fetchBeneficiaries;
 // Fonction pour ajouter un bénéficiaire
 export async function createBeneficiary(name, iban) {
     try {
-        const response = await fetch("http://127.0.0.1:8000/beneficiaires/", {
+        const response = await fetch(`${API_BASE_URL}/beneficiaires/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -57,7 +59,7 @@ export async function createBeneficiary(name, iban) {
 // Fonction pour supprimer un bénéficiaire
 export async function deleteBeneficiary(iban) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/beneficiaires/${iban}`, {
+        const response = await fetch(`${API_BASE_URL}/beneficiaires/${iban}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

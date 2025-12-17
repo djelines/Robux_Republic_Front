@@ -1,7 +1,8 @@
+const API_BASE_URL = import.meta.env.VITE_BASE_API_URL || "http://localhost:8000";
 // fonction pour mettre à jour le profil utilisateur 
 export const UpdateUserProfile = async (user) => {
     try {
-        const res = await fetch(`http://localhost:8000/auth/users/${user.uid}/profile`, {
+        const res = await fetch(`${API_BASE_URL}/auth/users/${user.uid}/profile`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
