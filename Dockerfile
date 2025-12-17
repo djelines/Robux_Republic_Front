@@ -1,16 +1,16 @@
 # Use the official Node.js 22 image as the base image
 FROM node:22-alpine
-# Switch to the non-root user 'node
+# Switch to a non-root user for better security
 USER node
-# Copy package.json and package-lock.json to the working directory
-COPY --chown=node:node package.json package-lock.json ./
 # Set the working directory inside the container
 WORKDIR /app
-# Change ownership of the working directory to the non-root user 'node'
+# Ensure the working directory has the correct permissions
 RUN chown node:node /app
-# Install project dependencies
+# Copy package.json and package-lock.json to the working directory
+COPY --chown=node:node package.json package-lock.json ./
+# Install dependencies using npm ci for a clean install
 RUN npm ci
-# Copy only the necessary files for the application 
+# Copy only the necessary files for the application
 COPY --chown=node:node src ./src
 COPY --chown=node:node public ./public
 COPY --chown=node:node index.html ./
