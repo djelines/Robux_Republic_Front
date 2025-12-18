@@ -27,7 +27,6 @@ import {
 import { useUser } from "@/context/UserContext.jsx";
 import {
   useLocation,
-  useParams,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
