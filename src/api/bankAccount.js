@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://robux-republic.onrender.com";
 // fonction pour récupérer tous les comptes bancaires d'un utilisateur pour les transferts
 export const getAllBankAccountsTransfert = async (uid) => {
     try {
